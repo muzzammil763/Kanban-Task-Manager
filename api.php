@@ -50,9 +50,24 @@ class TaskDatabase {
         }
     }
     
-    public function getAllTasks() {
-        $sql = "SELECT * FROM tasks ORDER BY created_at DESC";
-        $result = $this->conn->query($sql);
+    public function getAllTasks($projectId = null) {
+        if ($projectId) {
+            $sql = "SELECT t.*, p.name as project_name, p.color as project_color 
+                    FROM tasks t 
+                    LEFT JOIN projects p ON t.project_id = p.id 
+                    WHERE t.project_id = ?
+                    ORDER BY t.created_at DESC";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $projectId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        } else {
+            $sql = "SELECT t.*, p.name as project_name, p.color as project_color 
+                    FROM tasks t 
+                    LEFT JOIN projects p ON t.project_id = p.id 
+                    ORDER BY t.created_at DESC";
+            $result = $this->conn->query($sql);
+        }
         
         if (!$result) {
             throw new Exception("Error fetching tasks: " . $this->conn->error);
@@ -66,15 +81,15 @@ class TaskDatabase {
         return $tasks;
     }
     
-    public function createTask($content, $status) {
-        $sql = "INSERT INTO tasks (content, status, created_at, updated_at) VALUES (?, ?, NOW(), NOW())";
+    public function createTask($content, $status, $projectId = null) {
+        $sql = "INSERT INTO tasks (project_id, content, status, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
         
-        $stmt->bind_param("ss", $content, $status);
+        $stmt->bind_param("iss", $projectId, $content, $status);
         
         if (!$stmt->execute()) {
             throw new Exception("Execute failed: " . $stmt->error);
@@ -86,15 +101,15 @@ class TaskDatabase {
         return $this->getTask($id);
     }
     
-    public function updateTask($id, $content, $status) {
-        $sql = "UPDATE tasks SET content = ?, status = ?, updated_at = NOW() WHERE id = ?";
+    public function updateTask($id, $content, $status, $projectId = null) {
+        $sql = "UPDATE tasks SET project_id = ?, content = ?, status = ?, updated_at = NOW() WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
         
-        $stmt->bind_param("ssi", $content, $status, $id);
+        $stmt->bind_param("issi", $projectId, $content, $status, $id);
         
         if (!$stmt->execute()) {
             throw new Exception("Execute failed: " . $stmt->error);
@@ -144,7 +159,10 @@ class TaskDatabase {
     }
     
     private function getTask($id) {
-        $sql = "SELECT * FROM tasks WHERE id = ?";
+        $sql = "SELECT t.*, p.name as project_name, p.color as project_color 
+                FROM tasks t 
+                LEFT JOIN projects p ON t.project_id = p.id 
+                WHERE t.id = ?";
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
@@ -158,6 +176,111 @@ class TaskDatabase {
         $stmt->close();
         
         return $task;
+    }
+    
+    // Project CRUD Methods
+    public function getAllProjects() {
+        $sql = "SELECT p.*, 
+                (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id) as task_count
+                FROM projects p 
+                ORDER BY p.created_at DESC";
+        $result = $this->conn->query($sql);
+        
+        if (!$result) {
+            throw new Exception("Error fetching projects: " . $this->conn->error);
+        }
+        
+        $projects = [];
+        while ($row = $result->fetch_assoc()) {
+            $projects[] = $row;
+        }
+        
+        return $projects;
+    }
+    
+    public function createProject($name, $description = '', $color = '#10b981') {
+        $sql = "INSERT INTO projects (name, description, color, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
+        $stmt = $this->conn->prepare($sql);
+        
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+        
+        $stmt->bind_param("sss", $name, $description, $color);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
+        
+        $id = $this->conn->insert_id;
+        $stmt->close();
+        
+        return $this->getProject($id);
+    }
+    
+    public function updateProject($id, $name, $description = '', $color = '#10b981') {
+        $sql = "UPDATE projects SET name = ?, description = ?, color = ?, updated_at = NOW() WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+        
+        $stmt->bind_param("sssi", $name, $description, $color, $id);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
+        
+        $stmt->close();
+        
+        return $this->getProject($id);
+    }
+    
+    public function deleteProject($id) {
+        // First update tasks to remove project reference
+        $sql = "UPDATE tasks SET project_id = NULL WHERE project_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        
+        // Then delete the project
+        $sql = "DELETE FROM projects WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+        
+        $stmt->bind_param("i", $id);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
+        
+        $stmt->close();
+        
+        return ['success' => true];
+    }
+    
+    private function getProject($id) {
+        $sql = "SELECT p.*, 
+                (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id) as task_count
+                FROM projects p WHERE p.id = ?";
+        $stmt = $this->conn->prepare($sql);
+        
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+        
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $project = $result->fetch_assoc();
+        $stmt->close();
+        
+        return $project;
     }
     
     // API History Logging Methods
@@ -250,8 +373,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 try {
     switch ($action) {
         case 'get_tasks':
-            // Don't log get_tasks - only log actual task modifications (create, update, delete)
-            echo json_encode($db->getAllTasks());
+            $projectId = isset($_GET['project_id']) ? intval($_GET['project_id']) : null;
+            echo json_encode($db->getAllTasks($projectId));
             break;
             
         case 'create_task':
@@ -262,7 +385,8 @@ try {
                 echo json_encode(['error' => 'Missing required fields']);
                 exit;
             }
-            $result = $db->createTask($data['content'], $data['status']);
+            $projectId = isset($data['project_id']) ? intval($data['project_id']) : null;
+            $result = $db->createTask($data['content'], $data['status'], $projectId);
             $db->logApiRequest('create_task', $_SERVER['REQUEST_METHOD'], $result['id'], $data['content'], $data['status'], $data, 200);
             echo json_encode($result);
             break;
@@ -275,7 +399,8 @@ try {
                 echo json_encode(['error' => 'Missing required fields']);
                 exit;
             }
-            $result = $db->updateTask($data['id'], $data['content'], $data['status']);
+            $projectId = isset($data['project_id']) ? intval($data['project_id']) : null;
+            $result = $db->updateTask($data['id'], $data['content'], $data['status'], $projectId);
             $db->logApiRequest('update_task', $_SERVER['REQUEST_METHOD'], $data['id'], $data['content'], $data['status'], $data, 200);
             echo json_encode($result);
             break;
@@ -303,6 +428,51 @@ try {
             }
             $result = $db->deleteTask($data['id']);
             $db->logApiRequest('delete_task', $_SERVER['REQUEST_METHOD'], $data['id'], null, null, $data, 200);
+            echo json_encode($result);
+            break;
+        
+        // Project endpoints
+        case 'get_projects':
+            echo json_encode($db->getAllProjects());
+            break;
+        
+        case 'create_project':
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (!isset($data['name'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Missing project name']);
+                exit;
+            }
+            $description = isset($data['description']) ? $data['description'] : '';
+            $color = isset($data['color']) ? $data['color'] : '#10b981';
+            $result = $db->createProject($data['name'], $description, $color);
+            $db->logApiRequest('create_project', $_SERVER['REQUEST_METHOD'], null, $data['name'], null, $data, 200);
+            echo json_encode($result);
+            break;
+        
+        case 'update_project':
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (!isset($data['id']) || !isset($data['name'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Missing required fields']);
+                exit;
+            }
+            $description = isset($data['description']) ? $data['description'] : '';
+            $color = isset($data['color']) ? $data['color'] : '#10b981';
+            $result = $db->updateProject($data['id'], $data['name'], $description, $color);
+            $db->logApiRequest('update_project', $_SERVER['REQUEST_METHOD'], null, $data['name'], null, $data, 200);
+            echo json_encode($result);
+            break;
+        
+        case 'delete_project':
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (!isset($data['id'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Missing project ID']);
+                exit;
+            }
+            $result = $db->deleteProject($data['id']);
+            $db->logApiRequest('delete_project', $_SERVER['REQUEST_METHOD'], $data['id'], null, null, $data, 200);
             echo json_encode($result);
             break;
         
