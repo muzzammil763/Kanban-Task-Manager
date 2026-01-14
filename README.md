@@ -10,6 +10,18 @@ A Kanban Style Task Manager With PHP/MySQL Backend.
 | Database Viewer | http://localhost/Task-Manager/db.html |
 | phpMyAdmin | http://localhost/phpmyadmin |
 
+## API Endpoints (GET Requests)
+
+These URLs can be opened directly in your browser to see JSON responses:
+
+| Endpoint | URL |
+|----------|-----|
+| Get All Tasks | http://localhost/Task-Manager/api.php?action=get_tasks |
+| Get Tasks by Project | http://localhost/Task-Manager/api.php?action=get_tasks&project_id=1 |
+| Get All Projects | http://localhost/Task-Manager/api.php?action=get_projects |
+
+> **Tip:** Replace `localhost` with your IP (e.g., `192.168.1.1`) to access from other devices on the same network.
+
 ## Features
 
 - **Kanban Board** - Drag & drop tasks between columns (To Do, In Progress, Testing, Completed)

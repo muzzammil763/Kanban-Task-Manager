@@ -884,6 +884,22 @@
             color: var(--text-primary);
         }
 
+        .clear-history-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
         .query-sidebar-content {
             flex: 1;
             overflow-y: auto;
@@ -1356,11 +1372,19 @@
                 </svg>
                 SQL Query History
             </div>
-            <button class="query-sidebar-close" onclick="closeQuerySidebar()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-            </button>
+            <div style="display: flex; gap: 8px;">
+                <button class="clear-history-btn" onclick="clearSqlHistory()" title="Clear All">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                </button>
+                <button class="query-sidebar-close" onclick="closeQuerySidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="query-sidebar-content" id="queryHistoryList">
             <!-- Query items will be rendered here -->
@@ -1424,11 +1448,19 @@
                 </svg>
                 API Request History
             </div>
-            <button class="query-sidebar-close" onclick="closeApiSidebar()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-            </button>
+            <div style="display: flex; gap: 8px;">
+                <button class="clear-history-btn" onclick="clearApiHistory()" title="Clear All">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                </button>
+                <button class="query-sidebar-close" onclick="closeApiSidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="query-sidebar-content" id="apiHistoryList">
             <!-- API items will be rendered here -->
@@ -2393,6 +2425,22 @@
 
         function clearLocalHistory() {
             localStorage.removeItem(API_HISTORY_KEY);
+        }
+
+        function clearSqlHistory() {
+            if (confirm('Are you sure you want to clear all SQL query history?')) {
+                localStorage.removeItem(API_HISTORY_KEY);
+                queryHistory = [];
+                renderQueryHistory();
+            }
+        }
+
+        function clearApiHistory() {
+            if (confirm('Are you sure you want to clear all API request history?')) {
+                localStorage.removeItem(API_HISTORY_KEY);
+                apiHistory = [];
+                renderApiHistory();
+            }
         }
 
         // ==========================================
