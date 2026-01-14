@@ -745,6 +745,424 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
+
+        /* Query History Button */
+        .query-history-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .query-history-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* API History Button */
+        .api-history-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .api-history-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        /* API Action Badges */
+        .api-action-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .api-action-badge.get {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .api-action-badge.post {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        /* Query History Sidebar */
+        .query-sidebar {
+            position: fixed;
+            top: 0;
+            right: -35%;
+            width: 30%;
+            min-width: 360px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            z-index: 1001;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .query-sidebar.active {
+            right: 0;
+        }
+
+        .query-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .query-sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .query-sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .query-sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .query-sidebar-close {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .query-sidebar-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .query-sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .query-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .query-item:hover {
+            border-color: var(--accent-purple);
+            transform: translateX(-4px);
+            box-shadow: 4px 4px 16px rgba(139, 92, 246, 0.1);
+        }
+
+        .query-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .query-action-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .query-action-badge.create {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .query-action-badge.update {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .query-action-badge.delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .query-action-badge.status {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .query-action-badge.project {
+            background: rgba(139, 92, 246, 0.15);
+            color: #8b5cf6;
+        }
+
+        .query-item-time {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .query-preview {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 10px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+
+        .query-item-details {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .query-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
+        }
+
+        .query-empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Query Detail Modal */
+        .query-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .query-detail-modal.active {
+            display: flex;
+        }
+
+        .query-detail-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .query-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .query-detail-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .query-detail-close {
+            background: var(--bg-tertiary);
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .query-detail-close:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .query-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .query-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .query-meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .query-meta-value {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .query-sql-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .query-sql-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .query-sql-code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .query-sql-code .keyword {
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .query-sql-code .string {
+            color: var(--accent-green);
+        }
+
+        .query-sql-code .number {
+            color: var(--accent-amber);
+        }
+
+        .copy-query-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-query-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-emerald);
+            color: var(--text-primary);
+        }
+
+        .copy-query-btn.copied {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent-emerald);
+            color: var(--accent-emerald);
+        }
+
+        @media (max-width: 768px) {
+            .query-sidebar {
+                width: 100%;
+                min-width: 100%;
+                right: -100%;
+            }
+
+            .query-history-btn span {
+                display: none;
+            }
+
+            .query-history-btn {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -781,6 +1199,24 @@
                         <path d="M12 5v14M5 12h14" />
                     </svg>
                     New Task
+                </button>
+                <button class="query-history-btn" onclick="openQuerySidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" />
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                        <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                    </svg>
+                    <span>SQL History</span>
+                </button>
+                <button class="api-history-btn" onclick="openApiSidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    <span>API History</span>
                 </button>
             </div>
         </header>
@@ -906,6 +1342,146 @@
         </div>
     </div>
 
+    <!-- Query History Sidebar Overlay -->
+    <div class="query-sidebar-overlay" id="querySidebarOverlay" onclick="closeQuerySidebar()"></div>
+
+    <!-- Query History Sidebar -->
+    <div class="query-sidebar" id="querySidebar">
+        <div class="query-sidebar-header">
+            <div class="query-sidebar-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                </svg>
+                SQL Query History
+            </div>
+            <button class="query-sidebar-close" onclick="closeQuerySidebar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="query-sidebar-content" id="queryHistoryList">
+            <!-- Query items will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Query Detail Modal -->
+    <div class="query-detail-modal" id="queryDetailModal">
+        <div class="query-detail-content">
+            <div class="query-detail-header">
+                <div class="query-detail-title" id="queryDetailTitle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                    </svg>
+                    SQL Query Details
+                </div>
+                <button class="query-detail-close" onclick="closeQueryDetail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="query-detail-meta" id="queryDetailMeta">
+                <!-- Meta info rendered here -->
+            </div>
+            <div class="query-sql-block">
+                <div class="query-sql-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" />
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    </svg>
+                    SQL Query
+                </div>
+                <div class="query-sql-code" id="queryDetailSQL">
+                    <!-- SQL code rendered here -->
+                </div>
+            </div>
+            <button class="copy-query-btn" id="copyQueryBtn" onclick="copyQuery()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copy Query
+            </button>
+        </div>
+    </div>
+
+    <!-- API History Sidebar Overlay -->
+    <div class="query-sidebar-overlay" id="apiSidebarOverlay" onclick="closeApiSidebar()"></div>
+
+    <!-- API History Sidebar -->
+    <div class="query-sidebar" id="apiSidebar">
+        <div class="query-sidebar-header">
+            <div class="query-sidebar-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                API Request History
+            </div>
+            <button class="query-sidebar-close" onclick="closeApiSidebar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="query-sidebar-content" id="apiHistoryList">
+            <!-- API items will be rendered here -->
+        </div>
+    </div>
+
+    <!-- API Detail Modal -->
+    <div class="query-detail-modal" id="apiDetailModal">
+        <div class="query-detail-content">
+            <div class="query-detail-header">
+                <div class="query-detail-title" id="apiDetailTitle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    API Request Details
+                </div>
+                <button class="query-detail-close" onclick="closeApiDetail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="query-detail-meta" id="apiDetailMeta">
+                <!-- Meta info rendered here -->
+            </div>
+            <div class="query-sql-block">
+                <div class="query-sql-label" style="color: var(--accent-blue);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <polyline points="4 17 10 11 4 5" />
+                        <line x1="12" y1="19" x2="20" y2="19" />
+                    </svg>
+                    Request Data
+                </div>
+                <div class="query-sql-code" id="apiDetailRequest">
+                    <!-- Request data rendered here -->
+                </div>
+            </div>
+            <div class="query-sql-block">
+                <div class="query-sql-label" style="color: var(--accent-emerald);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <polyline points="9 10 4 15 9 20" />
+                        <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+                    </svg>
+                    Response Data
+                </div>
+                <div class="query-sql-code" id="apiDetailResponse">
+                    <!-- Response data rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Database Management (using PHP API)
         class TaskDatabase {
@@ -925,14 +1501,41 @@
                     options.body = JSON.stringify(data);
                 }
 
+                const startTime = new Date();
+
                 try {
                     const response = await fetch(`${this.apiUrl}?action=${action}${queryParams}`, options);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    return await response.json();
+                    const result = await response.json();
+
+                    // Log to localStorage for both API and SQL history
+                    logApiToLocalStorage({
+                        action: action,
+                        method: options.method,
+                        url: `${this.apiUrl}?action=${action}${queryParams}`,
+                        request_data: data,
+                        response_data: result,
+                        response_status: response.status,
+                        timestamp: startTime.toISOString(),
+                        duration: new Date() - startTime
+                    });
+
+                    return result;
                 } catch (error) {
                     console.error('API Error:', error);
+                    // Log failed request
+                    logApiToLocalStorage({
+                        action: action,
+                        method: options.method,
+                        url: `${this.apiUrl}?action=${action}${queryParams}`,
+                        request_data: data,
+                        response_data: { error: error.message },
+                        response_status: 500,
+                        timestamp: startTime.toISOString(),
+                        duration: new Date() - startTime
+                    });
                     throw error;
                 }
             }
@@ -1090,7 +1693,15 @@
             document.getElementById('modalTitle').textContent = 'Add New Task';
             document.getElementById('taskContent').value = '';
             document.getElementById('taskStatus').value = 'todo';
-            document.getElementById('taskProject').value = selectedProjectFilter || '';
+            // Set to selected filter project, or first project in list, or empty
+            const projectSelect = document.getElementById('taskProject');
+            if (selectedProjectFilter) {
+                projectSelect.value = selectedProjectFilter;
+            } else if (allProjects.length > 0) {
+                projectSelect.value = allProjects[0].id;
+            } else {
+                projectSelect.value = '';
+            }
             document.getElementById('taskModal').classList.add('active');
             setTimeout(() => document.getElementById('taskContent').focus(), 100);
         }
@@ -1326,10 +1937,13 @@
         // Keyboard shortcuts
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
-                if (document.getElementById('taskModal').classList.contains('active')) {
+                if (document.getElementById('queryDetailModal').classList.contains('active')) {
+                    closeQueryDetail();
+                } else if (document.getElementById('querySidebar').classList.contains('active')) {
+                    closeQuerySidebar();
+                } else if (document.getElementById('taskModal').classList.contains('active')) {
                     closeModal();
-                }
-                if (document.getElementById('projectsModal').classList.contains('active')) {
+                } else if (document.getElementById('projectsModal').classList.contains('active')) {
                     closeProjectsModal();
                 }
             }
@@ -1338,6 +1952,510 @@
                 openAddTaskModal();
             }
         });
+
+        // ==========================================
+        // SQL Query History Functions
+        // ==========================================
+
+        let queryHistory = [];
+        let currentQueryDetail = null;
+
+        // Generate SQL query from action data
+        function generateSQLQuery(item) {
+            const action = item.action;
+            const taskId = item.task_id;
+            const content = item.task_content;
+            const status = item.task_status;
+            let requestData = {};
+
+            try {
+                requestData = item.request_data ? JSON.parse(item.request_data) : {};
+            } catch (e) {
+                requestData = {};
+            }
+
+            switch (action) {
+                case 'create_task':
+                    const projectId1 = requestData.project_id || 'NULL';
+                    return `INSERT INTO tasks (project_id, content, status, created_at, updated_at) VALUES (${projectId1}, '${escapeSQL(content)}', '${status}', NOW(), NOW())`;
+
+                case 'update_task':
+                    const projectId2 = requestData.project_id || 'NULL';
+                    return `UPDATE tasks SET project_id = ${projectId2}, content = '${escapeSQL(content)}', status = '${status}', updated_at = NOW() WHERE id = ${taskId}`;
+
+                case 'update_status':
+                    return `UPDATE tasks SET status = '${status}', updated_at = NOW() WHERE id = ${taskId}`;
+
+                case 'delete_task':
+                    return `DELETE FROM tasks WHERE id = ${taskId}`;
+
+                case 'create_project':
+                    const color1 = requestData.color || '#10b981';
+                    return `INSERT INTO projects (name, description, color, created_at, updated_at) VALUES ('${escapeSQL(content)}', '', '${color1}', NOW(), NOW())`;
+
+                case 'update_project':
+                    const color2 = requestData.color || '#10b981';
+                    return `UPDATE projects SET name = '${escapeSQL(content)}', color = '${color2}', updated_at = NOW() WHERE id = ${requestData.id}`;
+
+                case 'delete_project':
+                    return `DELETE FROM projects WHERE id = ${taskId}`;
+
+                default:
+                    return 'Unknown query';
+            }
+        }
+
+        function escapeSQL(str) {
+            if (!str) return '';
+            return str.replace(/'/g, "''").replace(/\\/g, '\\\\');
+        }
+
+        async function fetchQueryHistory() {
+            try {
+                const response = await fetch('api.php?action=get_api_history');
+                if (!response.ok) throw new Error('Failed to fetch');
+                queryHistory = await response.json();
+                return queryHistory;
+            } catch (error) {
+                console.error('Error fetching query history:', error);
+                return [];
+            }
+        }
+
+        function openQuerySidebar() {
+            document.getElementById('querySidebar').classList.add('active');
+            document.getElementById('querySidebarOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderQueryHistory();
+        }
+
+        function closeQuerySidebar() {
+            document.getElementById('querySidebar').classList.remove('active');
+            document.getElementById('querySidebarOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        async function renderQueryHistory() {
+            const container = document.getElementById('queryHistoryList');
+            container.innerHTML = '<div class="query-empty-state">Loading...</div>';
+
+            await fetchQueryHistory();
+
+            if (queryHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="query-empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                            <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
+                        </svg>
+                        <div>No SQL queries yet</div>
+                        <div style="font-size: 12px; margin-top: 8px;">Perform actions to see the query history</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = queryHistory.map((item, index) => {
+                const actionClass = getActionClass(item.action);
+                const actionLabel = getActionLabel(item.action);
+                const sqlPreview = generateSQLQuery(item);
+
+                return `
+                    <div class="query-item" onclick="openQueryDetail(${index})">
+                        <div class="query-item-header">
+                            <span class="query-action-badge ${actionClass}">${actionLabel}</span>
+                            <span class="query-item-time">${formatQueryTime(item.created_at)}</span>
+                        </div>
+                        <div class="query-preview">${escapeHtml(sqlPreview)}</div>
+                        ${item.task_content ? `
+                            <div class="query-item-details">
+                                ${item.task_id ? `ID: ${item.task_id}` : ''}
+                                ${item.task_content ? ` • "${truncate(item.task_content, 30)}"` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getActionClass(action) {
+            if (action.includes('create')) return 'create';
+            if (action.includes('update') && !action.includes('status')) return 'update';
+            if (action.includes('status')) return 'status';
+            if (action.includes('delete')) return 'delete';
+            if (action.includes('project')) return 'project';
+            return 'update';
+        }
+
+        function getActionLabel(action) {
+            const labels = {
+                'create_task': '➕ CREATE',
+                'update_task': '✏️ UPDATE',
+                'update_status': '🔄 STATUS',
+                'delete_task': '🗑️ DELETE',
+                'create_project': '📁 NEW PROJECT',
+                'update_project': '📁 EDIT PROJECT',
+                'delete_project': '📁 DEL PROJECT'
+            };
+            return labels[action] || action.toUpperCase();
+        }
+
+        function formatQueryTime(timestamp) {
+            const date = new Date(timestamp);
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${month}/${day} ${hours}:${minutes} ${ampm}`;
+        }
+
+        function truncate(str, length) {
+            if (!str) return '';
+            return str.length > length ? str.substring(0, length) + '...' : str;
+        }
+
+        function openQueryDetail(index) {
+            currentQueryDetail = queryHistory[index];
+            const item = currentQueryDetail;
+            const sql = generateSQLQuery(item);
+
+            // Update meta info
+            const metaContainer = document.getElementById('queryDetailMeta');
+            metaContainer.innerHTML = `
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Action</span>
+                    <span class="query-meta-value">${getActionLabel(item.action)}</span>
+                </div>
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Timestamp</span>
+                    <span class="query-meta-value">${formatTime(item.created_at)}</span>
+                </div>
+                ${item.task_id ? `
+                    <div class="query-meta-item">
+                        <span class="query-meta-label">Task ID</span>
+                        <span class="query-meta-value">${item.task_id}</span>
+                    </div>
+                ` : ''}
+                ${item.task_status ? `
+                    <div class="query-meta-item">
+                        <span class="query-meta-label">Status</span>
+                        <span class="query-meta-value">${item.task_status}</span>
+                    </div>
+                ` : ''}
+                <div class="query-meta-item">
+                    <span class="query-meta-label">HTTP Method</span>
+                    <span class="query-meta-value">${item.method}</span>
+                </div>
+            `;
+
+            // Update SQL code with syntax highlighting
+            document.getElementById('queryDetailSQL').innerHTML = highlightSQL(sql);
+
+            // Reset copy button
+            const copyBtn = document.getElementById('copyQueryBtn');
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy Query
+            `;
+
+            document.getElementById('queryDetailModal').classList.add('active');
+        }
+
+        function closeQueryDetail() {
+            document.getElementById('queryDetailModal').classList.remove('active');
+            currentQueryDetail = null;
+        }
+
+        function highlightSQL(sql) {
+            const keywords = ['SELECT', 'INSERT', 'INTO', 'UPDATE', 'DELETE', 'FROM', 'WHERE', 'SET', 'VALUES', 'AND', 'OR', 'NOT', 'NULL', 'NOW', 'ORDER', 'BY', 'GROUP', 'JOIN', 'LEFT', 'RIGHT', 'INNER', 'OUTER', 'ON', 'AS', 'CREATE', 'TABLE', 'DROP', 'ALTER', 'INDEX', 'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES'];
+
+            let highlighted = escapeHtml(sql);
+
+            // Highlight keywords
+            keywords.forEach(keyword => {
+                const regex = new RegExp(`\\b(${keyword})\\b`, 'gi');
+                highlighted = highlighted.replace(regex, '<span class="keyword">$1</span>');
+            });
+
+            // Highlight strings (values in single quotes)
+            highlighted = highlighted.replace(/'([^']*)'/g, '<span class="string">\'$1\'</span>');
+
+            // Highlight numbers
+            highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="number">$1</span>');
+
+            return highlighted;
+        }
+
+        async function copyQuery() {
+            if (!currentQueryDetail) return;
+
+            const sql = generateSQLQuery(currentQueryDetail);
+
+            try {
+                await navigator.clipboard.writeText(sql);
+                const copyBtn = document.getElementById('copyQueryBtn');
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Copied!
+                `;
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy Query
+                    `;
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        }
+
+        // Close query detail modal when clicking outside
+        document.getElementById('queryDetailModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeQueryDetail();
+            }
+        });
+
+        // ==========================================
+        // LocalStorage-based History (no database needed)
+        // ==========================================
+
+        const API_HISTORY_KEY = 'task_manager_api_history';
+        const MAX_HISTORY_ITEMS = 500;
+
+        function logApiToLocalStorage(item) {
+            // Skip logging get_tasks and get_projects (too noisy)
+            if (item.action === 'get_tasks' || item.action === 'get_projects' || item.action === 'get_api_history') {
+                return;
+            }
+
+            try {
+                let history = JSON.parse(localStorage.getItem(API_HISTORY_KEY) || '[]');
+
+                // Add new item at the beginning
+                history.unshift({
+                    id: Date.now(),
+                    ...item
+                });
+
+                // Keep only the last MAX_HISTORY_ITEMS
+                if (history.length > MAX_HISTORY_ITEMS) {
+                    history = history.slice(0, MAX_HISTORY_ITEMS);
+                }
+
+                localStorage.setItem(API_HISTORY_KEY, JSON.stringify(history));
+            } catch (e) {
+                console.error('Failed to log to localStorage:', e);
+            }
+        }
+
+        function getApiHistoryFromStorage() {
+            try {
+                return JSON.parse(localStorage.getItem(API_HISTORY_KEY) || '[]');
+            } catch (e) {
+                console.error('Failed to get history from localStorage:', e);
+                return [];
+            }
+        }
+
+        function clearLocalHistory() {
+            localStorage.removeItem(API_HISTORY_KEY);
+        }
+
+        // ==========================================
+        // API History Sidebar Functions
+        // ==========================================
+
+        let apiHistory = [];
+        let currentApiDetail = null;
+
+        function openApiSidebar() {
+            document.getElementById('apiSidebar').classList.add('active');
+            document.getElementById('apiSidebarOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderApiHistory();
+        }
+
+        function closeApiSidebar() {
+            document.getElementById('apiSidebar').classList.remove('active');
+            document.getElementById('apiSidebarOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function renderApiHistory() {
+            const container = document.getElementById('apiHistoryList');
+            apiHistory = getApiHistoryFromStorage();
+
+            if (apiHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="query-empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        <div>No API requests yet</div>
+                        <div style="font-size: 12px; margin-top: 8px;">Perform actions to see the API history</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = apiHistory.map((item, index) => {
+                const methodClass = item.method === 'GET' ? 'get' : 'post';
+                const actionLabel = getActionLabel(item.action);
+
+                return `
+                    <div class="query-item" onclick="openApiDetail(${index})">
+                        <div class="query-item-header">
+                            <span class="api-action-badge ${methodClass}">${item.method} • ${actionLabel}</span>
+                            <span class="query-item-time">${formatQueryTime(item.timestamp)}</span>
+                        </div>
+                        <div class="query-preview">${escapeHtml(item.url)}</div>
+                        <div class="query-item-details">
+                            Status: ${item.response_status} • ${item.duration}ms
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openApiDetail(index) {
+            currentApiDetail = apiHistory[index];
+            const item = currentApiDetail;
+
+            // Update meta info
+            const metaContainer = document.getElementById('apiDetailMeta');
+            metaContainer.innerHTML = `
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Action</span>
+                    <span class="query-meta-value">${getActionLabel(item.action)}</span>
+                </div>
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Method</span>
+                    <span class="query-meta-value">${item.method}</span>
+                </div>
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Timestamp</span>
+                    <span class="query-meta-value">${formatTime(item.timestamp)}</span>
+                </div>
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Status</span>
+                    <span class="query-meta-value">${item.response_status}</span>
+                </div>
+                <div class="query-meta-item">
+                    <span class="query-meta-label">Duration</span>
+                    <span class="query-meta-value">${item.duration}ms</span>
+                </div>
+            `;
+
+            // Update request data
+            document.getElementById('apiDetailRequest').innerHTML = formatJson(item.request_data);
+
+            // Update response data
+            document.getElementById('apiDetailResponse').innerHTML = formatJson(item.response_data);
+
+            document.getElementById('apiDetailModal').classList.add('active');
+        }
+
+        function closeApiDetail() {
+            document.getElementById('apiDetailModal').classList.remove('active');
+            currentApiDetail = null;
+        }
+
+        function formatJson(data) {
+            if (!data) return '<span class="keyword">null</span>';
+            try {
+                const json = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+                return highlightJson(json);
+            } catch (e) {
+                return escapeHtml(String(data));
+            }
+        }
+
+        function highlightJson(json) {
+            let highlighted = escapeHtml(json);
+
+            // Highlight property names
+            highlighted = highlighted.replace(/"([^"]+)":/g, '<span class="keyword">"$1"</span>:');
+
+            // Highlight string values
+            highlighted = highlighted.replace(/: "([^"]*)"/g, ': <span class="string">"$1"</span>');
+
+            // Highlight numbers
+            highlighted = highlighted.replace(/: (\d+)/g, ': <span class="number">$1</span>');
+
+            // Highlight booleans and null
+            highlighted = highlighted.replace(/: (true|false|null)/g, ': <span class="keyword">$1</span>');
+
+            return highlighted;
+        }
+
+        // Close API detail modal when clicking outside
+        document.getElementById('apiDetailModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeApiDetail();
+            }
+        });
+
+        // Update keyboard shortcuts to include API modals
+        document.removeEventListener('keydown', keydownHandler);
+        function keydownHandler(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('apiDetailModal').classList.contains('active')) {
+                    closeApiDetail();
+                } else if (document.getElementById('apiSidebar').classList.contains('active')) {
+                    closeApiSidebar();
+                } else if (document.getElementById('queryDetailModal').classList.contains('active')) {
+                    closeQueryDetail();
+                } else if (document.getElementById('querySidebar').classList.contains('active')) {
+                    closeQuerySidebar();
+                } else if (document.getElementById('taskModal').classList.contains('active')) {
+                    closeModal();
+                } else if (document.getElementById('projectsModal').classList.contains('active')) {
+                    closeProjectsModal();
+                }
+            }
+        }
+        document.addEventListener('keydown', keydownHandler);
+
+        // ==========================================
+        // Update SQL History to use localStorage
+        // ==========================================
+
+        // Override fetchQueryHistory to use localStorage instead of database
+        async function fetchQueryHistory() {
+            // Use localStorage data instead of API
+            queryHistory = getApiHistoryFromStorage().filter(item =>
+                ['create_task', 'update_task', 'update_status', 'delete_task',
+                    'create_project', 'update_project', 'delete_project'].includes(item.action)
+            ).map(item => ({
+                id: item.id,
+                action: item.action,
+                method: item.method,
+                task_id: item.response_data?.id || item.request_data?.id,
+                task_content: item.request_data?.content || item.request_data?.name,
+                task_status: item.request_data?.status,
+                request_data: JSON.stringify(item.request_data),
+                response_status: item.response_status,
+                created_at: item.timestamp
+            }));
+            return queryHistory;
+        }
     </script>
 </body>
 
