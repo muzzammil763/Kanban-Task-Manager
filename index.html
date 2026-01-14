@@ -1918,10 +1918,128 @@
             }
         });
 
+        // ==========================================
+        // Real-Time Sync (Auto-refresh)
+        // ==========================================
+
+        let lastTasksHash = '';
+        let lastProjectsHash = '';
+        let syncInterval = null;
+        const SYNC_INTERVAL_MS = 2000; // Check every 2 seconds
+
+        function hashData(data) {
+            // Simple hash function for change detection
+            return JSON.stringify(data);
+        }
+
+        async function silentSync() {
+            // Don't sync if any modal is open (user is interacting)
+            if (document.getElementById('taskModal').classList.contains('active') ||
+                document.getElementById('projectsModal').classList.contains('active') ||
+                document.getElementById('querySidebar').classList.contains('active') ||
+                document.getElementById('apiSidebar').classList.contains('active')) {
+                return;
+            }
+
+            // Don't sync if user is dragging a task
+            if (draggedTaskId) {
+                return;
+            }
+
+            try {
+                // Fetch fresh data from server
+                const [newTasks, newProjects] = await Promise.all([
+                    db.getAllTasks(selectedProjectFilter),
+                    db.getAllProjects()
+                ]);
+
+                const newTasksHash = hashData(newTasks);
+                const newProjectsHash = hashData(newProjects);
+
+                // Only update if data has changed
+                let hasChanges = false;
+
+                if (newProjectsHash !== lastProjectsHash) {
+                    lastProjectsHash = newProjectsHash;
+                    allProjects = newProjects;
+                    updateProjectDropdowns();
+                    hasChanges = true;
+                }
+
+                if (newTasksHash !== lastTasksHash) {
+                    lastTasksHash = newTasksHash;
+                    // Silently update task counts and cards
+                    silentRenderTasks(newTasks);
+                    hasChanges = true;
+                }
+
+                if (hasChanges) {
+                    console.log('🔄 Synced changes from server');
+                }
+            } catch (error) {
+                // Silent fail - don't interrupt user
+                console.error('Sync error:', error);
+            }
+        }
+
+        function silentRenderTasks(tasks) {
+            const statuses = ['todo', 'in-progress', 'testing', 'completed'];
+
+            statuses.forEach(status => {
+                const container = document.getElementById(`tasks-${status}`);
+                const statusTasks = tasks.filter(t => t.status === status);
+
+                // Generate new HTML
+                const newHTML = statusTasks.length > 0
+                    ? statusTasks.map(task => createTaskCard(task)).join('')
+                    : '<div class="empty-state">No tasks yet</div>';
+
+                // Only update DOM if content changed
+                if (container.innerHTML !== newHTML) {
+                    container.innerHTML = newHTML;
+                }
+
+                // Update count
+                document.getElementById(`count-${status}`).textContent = statusTasks.length;
+            });
+        }
+
+        function startSync() {
+            if (syncInterval) return;
+            syncInterval = setInterval(silentSync, SYNC_INTERVAL_MS);
+            console.log('✅ Real-time sync started');
+        }
+
+        function stopSync() {
+            if (syncInterval) {
+                clearInterval(syncInterval);
+                syncInterval = null;
+                console.log('⏹️ Real-time sync stopped');
+            }
+        }
+
+        // Pause sync when page is hidden (user switched tabs)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopSync();
+            } else {
+                startSync();
+                silentSync(); // Immediate sync when returning
+            }
+        });
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', async function () {
             await loadProjects();
             await renderTasks();
+
+            // Store initial hashes
+            const tasks = await db.getAllTasks(selectedProjectFilter);
+            lastTasksHash = hashData(tasks);
+            lastProjectsHash = hashData(allProjects);
+
+            // Start real-time sync
+            startSync();
         });
 
         // Remove dragging class when drag ends

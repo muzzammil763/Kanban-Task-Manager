@@ -16,6 +16,7 @@ define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'task_manager');
+
 class TaskDatabase {
     private $conn;
     
@@ -283,72 +284,6 @@ class TaskDatabase {
         return $project;
     }
     
-    // API History Logging Methods
-    public function logApiRequest($action, $method, $taskId = null, $taskContent = null, $taskStatus = null, $requestData = null, $responseStatus = 200) {
-        // Initialize api_request_history table if it doesn't exist
-        $initSql = "CREATE TABLE IF NOT EXISTS api_request_history (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            action VARCHAR(100) NOT NULL,
-            method VARCHAR(10) NOT NULL,
-            task_id INT NULL,
-            task_content TEXT NULL,
-            task_status VARCHAR(50) NULL,
-            request_data JSON NULL,
-            response_status INT NOT NULL,
-            ip_address VARCHAR(45) NULL,
-            user_agent TEXT NULL,
-            created_at DATETIME NOT NULL,
-            INDEX idx_action (action),
-            INDEX idx_created (created_at),
-            INDEX idx_task_id (task_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-        
-        $this->conn->query($initSql);
-        
-        // Get client IP and user agent
-        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? null;
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        
-        // Convert request data to JSON
-        $requestDataJson = $requestData ? json_encode($requestData) : null;
-        
-        $sql = "INSERT INTO api_request_history (action, method, task_id, task_content, task_status, request_data, response_status, ip_address, user_agent, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-        $stmt = $this->conn->prepare($sql);
-        
-        if (!$stmt) {
-            // Fail silently if logging fails - don't break the main functionality
-            return false;
-        }
-        
-        $stmt->bind_param("ssisssiss", $action, $method, $taskId, $taskContent, $taskStatus, $requestDataJson, $responseStatus, $ipAddress, $userAgent);
-        $result = $stmt->execute();
-        $stmt->close();
-        
-        return $result;
-    }
-    
-    public function getApiHistory() {
-        $sql = "SELECT * FROM api_request_history ORDER BY created_at DESC LIMIT 1000";
-        $result = $this->conn->query($sql);
-        
-        if (!$result) {
-            return [];
-        }
-        
-        $history = [];
-        while ($row = $result->fetch_assoc()) {
-            $history[] = $row;
-        }
-        
-        return $history;
-    }
-    
-    public function clearApiHistory() {
-        $sql = "TRUNCATE TABLE api_request_history";
-        return $this->conn->query($sql);
-    }
-    
     public function __destruct() {
         if ($this->conn) {
             $this->conn->close();
@@ -381,13 +316,11 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             if (!isset($data['content']) || !isset($data['status'])) {
                 http_response_code(400);
-                $db->logApiRequest('create_task', $_SERVER['REQUEST_METHOD'], null, null, null, $data, 400);
                 echo json_encode(['error' => 'Missing required fields']);
                 exit;
             }
             $projectId = isset($data['project_id']) ? intval($data['project_id']) : null;
             $result = $db->createTask($data['content'], $data['status'], $projectId);
-            $db->logApiRequest('create_task', $_SERVER['REQUEST_METHOD'], $result['id'], $data['content'], $data['status'], $data, 200);
             echo json_encode($result);
             break;
             
@@ -395,13 +328,11 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             if (!isset($data['id']) || !isset($data['content']) || !isset($data['status'])) {
                 http_response_code(400);
-                $db->logApiRequest('update_task', $_SERVER['REQUEST_METHOD'], null, null, null, $data, 400);
                 echo json_encode(['error' => 'Missing required fields']);
                 exit;
             }
             $projectId = isset($data['project_id']) ? intval($data['project_id']) : null;
             $result = $db->updateTask($data['id'], $data['content'], $data['status'], $projectId);
-            $db->logApiRequest('update_task', $_SERVER['REQUEST_METHOD'], $data['id'], $data['content'], $data['status'], $data, 200);
             echo json_encode($result);
             break;
             
@@ -409,12 +340,10 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             if (!isset($data['id']) || !isset($data['status'])) {
                 http_response_code(400);
-                $db->logApiRequest('update_status', $_SERVER['REQUEST_METHOD'], null, null, null, $data, 400);
                 echo json_encode(['error' => 'Missing required fields']);
                 exit;
             }
             $result = $db->updateTaskStatus($data['id'], $data['status']);
-            $db->logApiRequest('update_status', $_SERVER['REQUEST_METHOD'], $data['id'], null, $data['status'], $data, 200);
             echo json_encode($result);
             break;
             
@@ -422,12 +351,10 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             if (!isset($data['id'])) {
                 http_response_code(400);
-                $db->logApiRequest('delete_task', $_SERVER['REQUEST_METHOD'], null, null, null, $data, 400);
                 echo json_encode(['error' => 'Missing task ID']);
                 exit;
             }
             $result = $db->deleteTask($data['id']);
-            $db->logApiRequest('delete_task', $_SERVER['REQUEST_METHOD'], $data['id'], null, null, $data, 200);
             echo json_encode($result);
             break;
         
@@ -446,7 +373,6 @@ try {
             $description = isset($data['description']) ? $data['description'] : '';
             $color = isset($data['color']) ? $data['color'] : '#10b981';
             $result = $db->createProject($data['name'], $description, $color);
-            $db->logApiRequest('create_project', $_SERVER['REQUEST_METHOD'], null, $data['name'], null, $data, 200);
             echo json_encode($result);
             break;
         
@@ -460,7 +386,6 @@ try {
             $description = isset($data['description']) ? $data['description'] : '';
             $color = isset($data['color']) ? $data['color'] : '#10b981';
             $result = $db->updateProject($data['id'], $data['name'], $description, $color);
-            $db->logApiRequest('update_project', $_SERVER['REQUEST_METHOD'], null, $data['name'], null, $data, 200);
             echo json_encode($result);
             break;
         
@@ -472,18 +397,7 @@ try {
                 exit;
             }
             $result = $db->deleteProject($data['id']);
-            $db->logApiRequest('delete_project', $_SERVER['REQUEST_METHOD'], $data['id'], null, null, $data, 200);
             echo json_encode($result);
-            break;
-        
-        case 'get_api_history':
-            $result = $db->getApiHistory();
-            echo json_encode($result);
-            break;
-        
-        case 'clear_api_history':
-            $result = $db->clearApiHistory();
-            echo json_encode(['success' => true, 'message' => 'API history cleared']);
             break;
             
         default:
